@@ -6,7 +6,8 @@ import { Form } from '@unform/web';
 import * as Yup from 'yup';
 
 import getValidationErrors from '../../utils/getValidationErrors';
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 
 import logoImg from '../../assets/logo.svg';
 
@@ -23,6 +24,8 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useAuth();
+  const { addToast } = useToast();
+
   const handleSubmit = useCallback(
     async (data: SignInFormData) => {
       try {
@@ -49,9 +52,10 @@ const SignIn: React.FC = () => {
 
           formRef.current?.setErrors(errors);
         }
+        addToast();
       }
     },
-    [signIn]
+    [signIn, addToast]
   );
   return (
     <Container>
